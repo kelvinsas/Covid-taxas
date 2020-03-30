@@ -37,6 +37,17 @@ function objData(obj){
     return newObj;
 }
 
+function geraCor(){
+    var hexadecimais = '0123456789ABCDEF';
+    var cor = '#';
+  
+    // Pega um número aleatório no array acima
+    for (var i = 0; i < 6; i++ ) {
+    //E concatena à variável cor
+        cor += hexadecimais[Math.floor(Math.random() * 16)];
+    }
+    return cor;
+}
 
     
 const Pdados = {
@@ -47,18 +58,22 @@ const Pdados = {
              "mortes": {
                         "label":"Mortes na "+titulo ,
                         "data":objData(data.timeline.deaths),
+                        "borderColor": geraCor(),
              },    
              "casos": {
                         "label":"Casos na "+titulo  ,
                         "data":objData(data.timeline.cases),
+                        "borderColor": geraCor(),
              },
              "posMortes": {
                           "label":"Porsentagem de almento de Mortes na "+titulo  ,
                           "data":objPosentagem(data.timeline.deaths),
+                          "borderColor": geraCor(),
              },
              "posCasos":{
                           "label":"Porsentagem de almento de Casos na "+titulo  ,
                           "data":objPosentagem(data.timeline.cases),
+                          "borderColor": geraCor(),
              },
          };
          return newDados;

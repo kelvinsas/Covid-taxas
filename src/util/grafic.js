@@ -1,46 +1,39 @@
-import React, { Component } from 'react'
+import React, {useEffect } from 'react'
 import Chart from "chart.js";
 
 
 
-export default class LineGraph extends Component {
-    constructor(props) {
-         super(props);  
-         this.state = {
-                    labels:props.labels,
-                    datas:props.datas,
-         };
-  }
-    chartRef = React.createRef();
+export default function LineGraph(props) {
+   
+const chartRef = React.createRef();
 
+    useEffect(() => {
+        handleChart();
+    }, []);
 
-    
-    componentDidMount() {
-              
-        const myChartRef = this.chartRef.current.getContext("2d");
+    function handleChart(){
+        const myChartRef = chartRef.current.getContext("2d");
         
         new Chart(myChartRef, {
             type: "line",
             data: {
                 //Bring in data
-                labels: this.state.label,
-                datasets: [
-                    this.state.datas
-                ]
+                labels: props.labels,
+                datasets:props.datas,
             },
             options: {
                 //Customize chart options
             }
         });
     }
-    render() {
-        return (
-            <div >
-                <canvas
-                    id="myChart"
-                    ref={this.chartRef}
-                />
-            </div>
+
+    
+    return (
+        <div >
+            <canvas
+                id="myChart"
+                ref={chartRef}
+            />
+        </div>
         )
-    }
 }

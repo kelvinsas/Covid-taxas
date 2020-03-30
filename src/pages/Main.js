@@ -1,52 +1,34 @@
 /*  Libs  */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Api from '../api.js';
 import Pdados from '../util/Pdados.js';
 import  LineGraph  from "../util/grafic.js";
 
 
-class Main extends React.Component {
 
-  state = {
-    labels:[],
-    load:false,
-    datas:[]
-  };
+export default function Main(){
 
-  async componentDidMount() {
+    const [labels, setLabels ] = useState([]);
+    const [datas, setDatas ] = useState([]);
+    const [load, setLoad ] = useState(false);
 
-    var { data } = await Api.get(`/historical/CHINA`);
+    useEffect(() => {
+        async function fetchData(){
+            var { data } = await Api.get(`/historical/BRAZIL`);
+            const brasil = Pdados.create(data, "Brasil");
+            var { data } = await Api.get(`/historical/CHINA`);
+            const china = Pdados.create(data, "China");
+            setLabels(brasil.labels);
+            setDatas([brasil.mortes, brasil.posMortes, brasil.casos, brasil.posCasos,china.mortes, china.posMortes, china.casos, china.posCasos]);
+            setLoad(true);
+        }
+        fetchData();
+    }, []);
 
-    const china = Pdados.create(data, "China");
-
-    var { data } = await Api.get(`/historical/BRAZIL`);
-
-    const brasil = Pdados.create(data, "Brasil");
-
-    this.setState(() => {
-        return {
-          labels: brasil.labels,
-          datas:brasil.posCasos,
-          load:true,
-        };
-      });
-
+    return(
+        <>
+            {load && <LineGraph labels={labels} datas={datas}/>}
+        </>
+    );
 }
 
-  render() {
-
-  return (
-        <div className="App">
-            {(this.state.load)? 
-            <LineGraph labels={this.state.labels} datas={this.state.datas}/>
-            :
-            <div></div>
-            }      
-        </div>
-  );
-
-  }
-
-}
-
-export default Main;
